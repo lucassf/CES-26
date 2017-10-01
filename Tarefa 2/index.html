@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>Tarefa2</title>
+    <link href="css/default.css" rel="stylesheet" />
+    <style>
+        #map {
+            height: 100%;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <p>Vídeo randomico</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/-8iL1MOHmYM"
+            frameborder="0" allowfullscreen></iframe>
+
+    <p>Sua localizaco</p>
+    <div id="map"></div>
+    <script src="js/maps.js">
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?AIzaSyCbS87e-lmQ7yhmT6iLjb5gZrjP34S0_qk&callback=initMap"
+            type="text/javascript">
+    </script>
+
+    <p>Cronometro: <output id="result">60</output>s</p>
+    <button onclick="startWorker()">Start Worker</button>
+    <button onclick="stopWorker()">Stop Worker</button>
+
+    <script>
+        var w;
+
+        function startWorker() {
+            if (typeof (Worker) !== "undefined") {
+                if (typeof (w) == "undefined") {
+                    w = new Worker("js/worker.js");
+                }
+                w.onmessage = function (event) {
+                    document.getElementById("result").innerHTML = event.data;
+                };
+            } else {
+                document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
+            }
+        }
+
+        function stopWorker() {
+            w.terminate();
+            w = undefined;
+            document.getElementById("result").innerHTML = 60;
+        }
+    </script>
+</body>
+
+</html>
+
+
